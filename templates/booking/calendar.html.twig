@@ -1,0 +1,131 @@
+{# templates/booking/calendar.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('booking_new') }}">Create new booking</a>
+    <div id="ex1" class="modal">
+        <p>Thanks for clicking. That felt good.</p>
+        <a href="#" rel="modal:close">Close</a>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+            <button class="btn">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
+
+      </div>
+    <p><a href="#ex1" rel="modal:open">Open Modal</a></p>
+    {% include '@FullCalendar/Calendar/calendar.html.twig' %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/locale/fr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // check if this day has an event before
+            function IsDateHasEvent(dateStart, dateEnd) {
+                var allEvents = [];
+                allEvents = $('#calendar-holder').fullCalendar('clientEvents');
+                console.log(allEvents);
+                var event = $.grep(allEvents, function (v) {
+                    console.log('-----');
+                    console.log(v._id);
+                    console.log(+v.start);
+                    console.log(+dateStart);
+                    console.log(dateEnd);
+                    console.log(+v.end);
+                    return (+v.start <= +dateStart && +v.end >= +dateStart) | (+v.start <= +dateEnd && +v.end >= +dateEnd) | (+dateStart <= +v.start && +dateEnd >= +v.start) | (+dateStart <= +v.end && +dateEnd >= +v.end);
+                });
+                return event.length > 0;
+            }
+            $('#booking_beginAt_time_hour').hide();
+            $('#booking_beginAt_time_minute').hide();
+            $('#booking_endAt_time_hour').hide();
+            $('#booking_endAt_time_minute').hide();
+            $('#booking_endAt_time_hour').val("23");
+            $('#booking_endAt_time_minute').val("59");
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+            
+            var calendar = $('#calendar-holder');
+            $("#calendar-holder").fullCalendar({
+                eventSources: [
+                    {
+                        url: "{{ path('fullcalendar_load_events') }}",
+                        type: "POST",
+                        data: {
+                            filters: {},
+                        },
+                        error: function () {
+                            // alert("There was an error while fetching FullCalendar!");
+                        }
+                    }
+                ],
+                header: {
+                    center: "title",
+                    left: "prev,next today",
+                    right: "month,agendaWeek,agendaDay"
+                },
+                lazyFetching: true,
+                locale: "fr",
+                selectable: true,
+                selectHelper: true,
+                navLinks: true, // can click day/week names to navigate views
+                //events: events_array,
+                eventRender: function(event, element) {
+                    element.attr('title', event.tip);
+                },
+                select: function(start, end, jsEvent, view) {
+                    //1000*3600*24
+                    
+                    if (IsDateHasEvent(start, end - 1000*3600*24)) {
+                        alert('selectionner des dates qui ne sont pas encore prises');
+                    } else {
+                        alert('tsis')
+                    }
+                    var dateFin = moment(end).subtract(1, 'days').format();
+                    // start contains the date you have selected
+                    // end contains the end date. 
+                    // Caution: the end date is exclusive (new since v2).
+                    var allDay = !start.hasTime && !end.hasTime;
+                    var dateDebut = moment(start).format();
+                    dateDebut = dateDebut.split('-');
+                    
+                    dateFin = dateFin.split('-');
+                    //dateDebut
+                    $('#booking_beginAt_date_month').val(parseInt(dateDebut[1]));
+                    $('#booking_beginAt_date_day').val(parseInt(dateDebut[2]));
+                    $('#booking_beginAt_date_year').val(parseInt(dateDebut[0]));
+                    //dateFin
+                    $('#booking_endAt_date_month').val(parseInt(dateFin[1]));
+                    $('#booking_endAt_date_day').val(parseInt(dateFin[2]));
+                    $('#booking_endAt_date_year').val(parseInt(dateFin[0]));
+                    //alert(["Event Start date: " + moment(start).format(),
+                      //     "Event End date: " + moment(end).format(),
+                        //   "AllDay: " + allDay].join("\n"));
+                    $("#ex1").modal("show");
+                },
+//https://stackoverflow.com/questions/17613582/fullcalendar-change-the-color-for-specific-days
+                //////dayClick: function(date, jsEvent, view) {
+                    //calendar.fullCalendar('renderEvent', { title: 'YOUR TITLE', start: date, allDay: true }, true );
+                    //alert('Clicked on: ' + date.format());
+                    //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+                    //alert('Current view: ' + view.name);
+                    // change the day's background color just for fun
+                    //$(this).css('background-color', 'red');
+
+               //},
+               
+            });
+        });
+    </script>
+{% endblock %}
