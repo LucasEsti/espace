@@ -53,8 +53,9 @@ class FullCalendarListener
              */
             // $bookingEvent->setUrl('http://www.google.com');
             // $bookingEvent->setBackgroundColor($booking->getColor());
-            // $bookingEvent->setCustomField('borderColor', $booking->getColor());
-
+            $espace = $booking->getEspace();
+            $bookingEvent->setCustomField('espace_id', $espace->getId());
+            $bookingEvent->setId($booking->getId());
             $bookingEvent->setUrl(
                 $this->router->generate('booking_show', [
                     'id' => $booking->getId(),

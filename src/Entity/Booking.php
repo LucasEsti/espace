@@ -30,6 +30,12 @@ class Booking
      * @ORM\Column(type="string", length=255)
      */
     private $title;
+    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Espace")
+     */
+    private $espace;
 
     public function getId(): int
     {
@@ -68,6 +74,19 @@ class Booking
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+    
+    
+    public function getEspace(): ?Espace
+    {
+        return $this->espace;
+    }
+
+    public function setEspace(?Espace $espace): self
+    {
+        $this->espace = $espace;
 
         return $this;
     }

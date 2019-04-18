@@ -4,13 +4,18 @@
 {% block body %}
     <a href="{{ path('booking_new') }}">Create new booking</a>
     <div id="ex1" class="modal">
-        <p>Thanks for clicking. That felt good.</p>
-        <a href="#" rel="modal:close">Close</a>
+        <p>Voulez-vous reserver pour ces/cette date(s)</p>
+        
         {{ form_start(form) }}
         {{ form_widget(form) }}
             <button class="btn">{{ button_label|default('Save') }}</button>
         {{ form_end(form) }}
-
+        <a href="#" rel="modal:close">cancel</a>
+      </div>
+       <div id="ex2" class="modal">
+        <p>ce/certaines de ces dates sont déjà prises</p>
+        
+        <a href="#" rel="modal:close">cancel</a>
       </div>
     <p><a href="#ex1" rel="modal:open">Open Modal</a></p>
     {% include '@FullCalendar/Calendar/calendar.html.twig' %}
@@ -32,16 +37,11 @@
             // check if this day has an event before
             function IsDateHasEvent(dateStart, dateEnd) {
                 var allEvents = [];
+                idEspace = {{ idEspace }};
                 allEvents = $('#calendar-holder').fullCalendar('clientEvents');
-                console.log(allEvents);
+                       //console.log(allEvents);
                 var event = $.grep(allEvents, function (v) {
-                    console.log('-----');
-                    console.log(v._id);
-                    console.log(+v.start);
-                    console.log(+dateStart);
-                    console.log(dateEnd);
-                    console.log(+v.end);
-                    return (+v.start <= +dateStart && +v.end >= +dateStart) | (+v.start <= +dateEnd && +v.end >= +dateEnd) | (+dateStart <= +v.start && +dateEnd >= +v.start) | (+dateStart <= +v.end && +dateEnd >= +v.end);
+                    return ((+v.start <= +dateStart && +v.end >= +dateStart) && ['all', +v.espace_id].indexOf(idEspace) >= 0) | ((+v.start <= +dateEnd && +v.end >= +dateEnd) && ['all', +v.espace_id].indexOf(idEspace) >= 0) | ((+dateStart <= +v.start && +dateEnd >= +v.start) && ['all', +v.espace_id].indexOf(idEspace) >= 0) | ((+dateStart <= +v.end && +dateEnd >= +v.end) && ['all', +v.espace_id].indexOf(idEspace) >= 0);
                 });
                 return event.length > 0;
             }
@@ -81,18 +81,23 @@
                 selectHelper: true,
                 navLinks: true, // can click day/week names to navigate views
                 //events: events_array,
-                eventRender: function(event, element) {
+                eventRender: function(event, element, view) {
+                    idEspace = {{ idEspace }};
+                    //console.log(idEspace);
+                    //COMPARE by id OF event
+                    //compare by espace id
+                    return ['all', event.espace_id].indexOf(idEspace) >= 0
+                    //return ['all', event.url].indexOf('/booking/4') >= 0
                     element.attr('title', event.tip);
                 },
                 select: function(start, end, jsEvent, view) {
                     //1000*3600*24
-                    
+                    //console.log(jsEvent);
                     if (IsDateHasEvent(start, end - 1000*3600*24)) {
-                        alert('selectionner des dates qui ne sont pas encore prises');
+                        $("#ex2").modal("show");
+                        //alert('selectionner des dates qui ne sont pas encore prises');
                     } else {
-                        alert('tsis')
-                    }
-                    var dateFin = moment(end).subtract(1, 'days').format();
+                        var dateFin = moment(end).subtract(1, 'days').format();
                     // start contains the date you have selected
                     // end contains the end date. 
                     // Caution: the end date is exclusive (new since v2).
@@ -109,10 +114,13 @@
                     $('#booking_endAt_date_month').val(parseInt(dateFin[1]));
                     $('#booking_endAt_date_day').val(parseInt(dateFin[2]));
                     $('#booking_endAt_date_year').val(parseInt(dateFin[0]));
+                    $('#booking_espace').val(parseInt({{ idEspace }}));
                     //alert(["Event Start date: " + moment(start).format(),
                       //     "Event End date: " + moment(end).format(),
                         //   "AllDay: " + allDay].join("\n"));
                     $("#ex1").modal("show");
+                    }
+                    
                 },
 //https://stackoverflow.com/questions/17613582/fullcalendar-change-the-color-for-specific-days
                 //////dayClick: function(date, jsEvent, view) {

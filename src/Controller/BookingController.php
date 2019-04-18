@@ -28,7 +28,7 @@ class BookingController extends AbstractController
     /**
      * @Route("/new", name="booking_new", methods={"GET","POST"})
      */
-    public function newE(Request $request): Response
+    public function new(Request $request): Response
     {
         $booking = new Booking();
         //var_dump($booking);die;
@@ -39,8 +39,8 @@ class BookingController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($booking);
             $entityManager->flush();
-
-            return $this->redirectToRoute('booking_calendar');
+            $espace = $booking->getEspace();
+            return $this->redirectToRoute('espace_show', ['id' => $espace->getId()]);
         }
 
         return $this->render('booking/new.html.twig', [
@@ -71,7 +71,7 @@ class BookingController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('booking_index', [
-                'id' => $booking->getId(),
+                'id' => $booking->getId()
             ]);
         }
 
@@ -96,14 +96,16 @@ class BookingController extends AbstractController
     }
     
     /**
-     * @Route("/calendar", name="booking_calendar", methods={"GET"})
+     * @Route("/calendar/{id}", name="booking_calendar", methods={"GET"}, requirements={"id":"\d+"})
      */
     public function calendar(Request $request): Response
     {
+        $idEspace = $request->attributes->get('id');
+        //dump($idEspace);die;
         $booking = new Booking();
         //var_dump($booking);die;
-        $form = $this->createForm(BookingType::class, $booking, array( 'action' => 'new'));
+        $form = $this->createForm(BookingType::class, $booking, array('action' => $this->generateUrl('booking_new')));
         $form->handleRequest($request);
-        return $this->render('booking/calendar.html.twig', ['form' => $form->createView()]);
+        return $this->render('booking/calendar.html.twig', ['form' => $form->createView(), 'idEspace' => $idEspace]);
     }
 }
