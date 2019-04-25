@@ -2,8 +2,18 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <a href="{{ path('booking_new') }}">Create new booking</a>
-    <div id="ex1" class="modal">
+
+<!-- Modal -->
+<div id="ex1" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
         <p>Voulez-vous reserver pour ces/cette date(s)</p>
         
         {{ form_start(form) }}
@@ -12,26 +22,41 @@
         {{ form_end(form) }}
         <a href="#" rel="modal:close">cancel</a>
       </div>
-       <div id="ex2" class="modal">
-        <p>ce/certaines de ces dates sont déjà prises</p>
-        
-        <a href="#" rel="modal:close">cancel</a>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
-    <p><a href="#ex1" rel="modal:open">Open Modal</a></p>
+    </div>
+
+  </div>
+</div>
+<div id="ex2" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>ce/certaines de ces dates sont déjà prises</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+    
     {% include '@FullCalendar/Calendar/calendar.html.twig' %}
 {% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.css">
+{% block stylesheets %} 
+    
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="https://momentjs.com/downloads/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/locale/fr.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             // check if this day has an event before
