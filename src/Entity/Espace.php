@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EspaceRepository")
  */
@@ -31,6 +31,14 @@ class Espace
      */
     private $active;
 
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Ajouter une image jpg")
+     * @Assert\File(mimeTypes={ "image/jpeg" })
+     */
+    private $image;
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +76,18 @@ class Espace
     public function setActive(int $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+    
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
 
         return $this;
     }

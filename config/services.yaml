@@ -30,3 +30,12 @@ services:
     App\EventListener\FullCalendarListener:
         tags:
             - { name: 'kernel.event_listener', event: 'fullcalendar.set_data', method: loadEvents }
+    app.image_uploader:
+        class: App\Service\ImageUpload
+        arguments: ['%images_directory%']
+    app.doctrine_image_listener:
+        class: App\EventListener\ImageUploadListener
+        arguments: ['@app.image_uploader']
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }

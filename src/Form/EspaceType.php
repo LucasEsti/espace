@@ -6,6 +6,7 @@ use App\Entity\Espace;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class EspaceType extends AbstractType
 {
@@ -15,6 +16,7 @@ class EspaceType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('active')
+            ->add('image', FileType::class, array('label' => 'Image(JPG)'))
         ;
     }
 

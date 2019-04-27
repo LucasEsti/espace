@@ -15,3 +15,6 @@ framework:
     #fragments: true
     php_errors:
         log: true
+parameters:
+    locale: en
+    images_directory: '%kernel.root_dir%/../assets/upload/images'
