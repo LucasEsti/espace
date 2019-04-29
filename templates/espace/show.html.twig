@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>Espace</h1>
-
+    <img src="{{ asset('images/' ~ espace.image) }}">
     <table class="table">
         <tbody>
             <tr>
@@ -23,6 +23,7 @@
                 <th>Active</th>
                 <td>{{ espace.active }}</td>
             </tr>
+            
         </tbody>
     </table>
             

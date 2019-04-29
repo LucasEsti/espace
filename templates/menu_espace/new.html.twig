@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New MenuEspace{% endblock %}
+
+{% block body %}
+    <h1>Create new MenuEspace</h1>
+
+    {{ include('menu_espace/_form.html.twig') }}
+
+    <a href="{{ path('menu_espace_index') }}">back to list</a>
+{% endblock %}

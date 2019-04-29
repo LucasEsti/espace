@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EspaceActivite index{% endblock %}
+
+{% block body %}
+    <h1>EspaceActivite index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>Prix</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for espace_activite in espace_activites %}
+            <tr>
+                <td>{{ espace_activite.id }}</td>
+                <td>{{ espace_activite.libelle }}</td>
+                <td>{{ espace_activite.prix }}</td>
+                <td>
+                    <a href="{{ path('espace_activite_show', {'id': espace_activite.id}) }}">show</a>
+                    <a href="{{ path('espace_activite_edit', {'id': espace_activite.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('espace_activite_new') }}">Create new</a>
+{% endblock %}

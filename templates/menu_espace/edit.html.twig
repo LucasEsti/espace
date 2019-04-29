@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit MenuEspace{% endblock %}
+
+{% block body %}
+    <h1>Edit MenuEspace</h1>
+
+    {{ include('menu_espace/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('menu_espace_index') }}">back to list</a>
+
+    {{ include('menu_espace/_delete_form.html.twig') }}
+{% endblock %}

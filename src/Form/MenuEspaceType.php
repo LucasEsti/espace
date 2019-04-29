@@ -2,21 +2,22 @@
 
 namespace App\Form;
 
-use App\Entity\Booking;
+use App\Entity\MenuEspace;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Espace;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
-class BookingType extends AbstractType
+class MenuEspaceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('beginAt')
-            ->add('endAt')
-            ->add('title')
+            ->add('libelle')
+            ->add('prix')
+            ->add('image', FileType::class, array('label' => 'Image(JPG)'))
             ->add('espace', EntityType::class, [
                 // looks for choices from this entity
                 'class' => Espace::class,
@@ -27,13 +28,14 @@ class BookingType extends AbstractType
                 // used to render a select box, check boxes or radios
                 // 'multiple' => true,
                 // 'expanded' => true,
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Booking::class,
+            'data_class' => MenuEspace::class,
         ]);
     }
 }

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EspacePhotos{% endblock %}
+
+{% block body %}
+    <h1>EspacePhotos</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ espace_photo.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ espace_photo.description }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ espace_photo.image }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('espace_photos_index') }}">back to list</a>
+
+    <a href="{{ path('espace_photos_edit', {'id': espace_photo.id}) }}">edit</a>
+
+    {{ include('espace_photos/_delete_form.html.twig') }}
+{% endblock %}
